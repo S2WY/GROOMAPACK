@@ -33,7 +33,7 @@ public class ModEffects {
                             EntityAttributes.GENERIC_MOVEMENT_SPEED,
                             KayAndCarl.id("confused_freeze"),
                             -1.0,
-                            Operation.MULTIPLY_TOTAL));
+                            Operation.ADD_MULTIPLIED_TOTAL));
 
     /**
      * Bleed — HARMFUL, dark red. Damage dealt in BleedEffect.applyUpdateEffect.
@@ -54,7 +54,7 @@ public class ModEffects {
                             EntityAttributes.GENERIC_MOVEMENT_SPEED,
                             KayAndCarl.id("compression_slow"),
                             -0.15,
-                            Operation.MULTIPLY_TOTAL));
+                            Operation.ADD_MULTIPLIED_TOTAL));
 
     private static RegistryEntry<StatusEffect> register(String name, StatusEffect effect) {
         return Registry.registerReference(Registries.STATUS_EFFECT, KayAndCarl.id(name), effect);

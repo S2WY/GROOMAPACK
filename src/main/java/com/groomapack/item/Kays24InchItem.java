@@ -20,8 +20,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -29,12 +29,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import com.groomapack.item.EmberCoatingItem;
 
-// NOTE FOR COMPILE: AttributeModifierSlot controls WHICH hand/slot the modifier
-// applies to. In 1.21.1 Yarn it is a standalone class, likely at one of:
-//   net.minecraft.entity.attribute.AttributeModifierSlot   ← most likely
-//   net.minecraft.component.type.AttributeModifiersComponent.AttributeModifierSlot
-// If the build fails on this import, try the other path.
-import net.minecraft.entity.attribute.AttributeModifierSlot;
+// AttributeModifierSlot controls WHICH hand/slot the modifier applies to.
+// In 1.21.1 Yarn it lives in the component package.
+import net.minecraft.component.type.AttributeModifierSlot;
 
 /**
  * Kay's 24 Inch — the central multi-tool of Groomapack.
@@ -114,9 +111,9 @@ public class Kays24InchItem extends Item {
      *
      * AttributeModifierSlot.MAINHAND means these only apply in the main hand.
      *
-     * NOTE: EntityAttributes.BLOCK_INTERACTION_RANGE and ENTITY_INTERACTION_RANGE
-     * were added in Minecraft 1.20.5. They should exist in 1.21.1. If the compiler
-     * can't find them, check EntityAttributes — they might be prefixed PLAYER_.
+     * NOTE: the interaction-range attributes were added in 1.20.5 and in 1.21.1
+     * Yarn carry the PLAYER_ prefix (PLAYER_BLOCK_INTERACTION_RANGE /
+     * PLAYER_ENTITY_INTERACTION_RANGE).
      */
     @Override
     public AttributeModifiersComponent getAttributeModifiers() {
@@ -127,10 +124,10 @@ public class Kays24InchItem extends Item {
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED,
                         new EntityAttributeModifier(BASE_ATTACK_SPEED_MODIFIER_ID, -2.6, Operation.ADD_VALUE),
                         AttributeModifierSlot.MAINHAND)
-                .add(EntityAttributes.BLOCK_INTERACTION_RANGE,
+                .add(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE,
                         new EntityAttributeModifier(BLOCK_REACH_ID, REACH_BLOCK_BONUS, Operation.ADD_VALUE),
                         AttributeModifierSlot.MAINHAND)
-                .add(EntityAttributes.ENTITY_INTERACTION_RANGE,
+                .add(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,
                         new EntityAttributeModifier(ENTITY_REACH_ID, REACH_ENTITY_BONUS, Operation.ADD_VALUE),
                         AttributeModifierSlot.MAINHAND)
                 .build();
@@ -141,18 +138,20 @@ public class Kays24InchItem extends Item {
     // =========================================================================
 
     /**
-     * isSuitableFor — returns true if this item can harvest the block at full speed
-     * AND drop the item (vs. destroying it without a drop).
+     * isCorrectForDrops — returns true if this item is the correct tool to make
+     * the block drop its item (vs. destroying it without a drop). 1.21.1 renamed
+     * the old isSuitableFor(BlockState) to isCorrectForDrops(ItemStack, BlockState).
      * We cover both pickaxe-mineable (stone, ores) and shovel-mineable (dirt, sand, gravel).
      */
     @Override
-    public boolean isSuitableFor(BlockState state) {
+    public boolean isCorrectForDrops(ItemStack stack, BlockState state) {
         return state.isIn(BlockTags.PICKAXE_MINEABLE)
                 || state.isIn(BlockTags.SHOVEL_MINEABLE);
     }
 
     /**
-     * getMiningSpeedMultiplier — how fast each block is broken.
+     * getMiningSpeed — how fast each block is broken. (1.21.1 renamed the old
+     * getMiningSpeedMultiplier to getMiningSpeed.)
      *
      * In Combat Mode: returns 1.0 (no bonus) — mining feels like bare hands.
      * In Tool Mode:   returns NETHERITE speed (9.0) for relevant blocks.
@@ -161,7 +160,7 @@ public class Kays24InchItem extends Item {
      * technically break blocks in Combat Mode, but it takes an extremely long time.
      */
     @Override
-    public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
+    public float getMiningSpeed(ItemStack stack, BlockState state) {
         if (!isToolMode(stack)) return 1.0f;
 
         if (state.isIn(BlockTags.PICKAXE_MINEABLE) || state.isIn(BlockTags.SHOVEL_MINEABLE)) {
@@ -181,11 +180,11 @@ public class Kays24InchItem extends Item {
      *   B) Tool Mode, right-click aimed at dirt → extract Raw Core Dust (1–3).
      *   C) Tool Mode, right-click aimed elsewhere → activate Deep Reach (if off cooldown).
      *
-     * ActionResult.SUCCESS = "I handled this, stop processing."
-     * ActionResult.PASS    = "I did nothing, continue with default behaviour."
+     * success = "I handled this, stop processing."
+     * pass    = "I did nothing, continue with default behaviour."
      */
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
 
         // A) Mode toggle — sneak + right-click
@@ -195,7 +194,7 @@ public class Kays24InchItem extends Item {
             String label = newMode ? "§a[Tool Mode]" : "§c[Combat Mode]";
             user.sendMessage(Text.literal("Kay's 24 Inch → " + label), true); // true = action bar
             user.getItemCooldownManager().set(stack, 10); // brief cooldown to prevent spam
-            return ActionResult.SUCCESS;
+            return TypedActionResult.success(stack, world.isClient);
         }
 
         // B & C) Only available in Tool Mode
@@ -214,7 +213,7 @@ public class Kays24InchItem extends Item {
                         user.sendMessage(Text.literal("Extracted §e" + amount + "x Raw Core Dust§r."), true);
                         stack.damage(1, user, EquipmentSlot.MAINHAND);
                     }
-                    return ActionResult.SUCCESS;
+                    return TypedActionResult.success(stack, world.isClient);
                 }
             }
 
@@ -230,10 +229,10 @@ public class Kays24InchItem extends Item {
                             Text.literal("§7Deep Reach: §c" + secsLeft + "s§7 cooldown remaining."), true);
                 }
             }
-            return ActionResult.SUCCESS;
+            return TypedActionResult.success(stack, world.isClient);
         }
 
-        return ActionResult.PASS;
+        return TypedActionResult.pass(stack);
     }
 
     // =========================================================================
@@ -341,12 +340,12 @@ public class Kays24InchItem extends Item {
      * on reconnect (or just cleans up gracefully).
      */
     private void activateDeepReach(ItemStack stack, PlayerEntity player, long now) {
-        var blockAttr = player.getAttributeInstance(EntityAttributes.BLOCK_INTERACTION_RANGE);
+        var blockAttr = player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE);
         if (blockAttr != null && blockAttr.getModifier(DEEP_BLOCK_ID) == null) {
             blockAttr.addTemporaryModifier(
                     new EntityAttributeModifier(DEEP_BLOCK_ID, DEEP_REACH_BONUS, Operation.ADD_VALUE));
         }
-        var entityAttr = player.getAttributeInstance(EntityAttributes.ENTITY_INTERACTION_RANGE);
+        var entityAttr = player.getAttributeInstance(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE);
         if (entityAttr != null && entityAttr.getModifier(DEEP_ENTITY_ID) == null) {
             entityAttr.addTemporaryModifier(
                     new EntityAttributeModifier(DEEP_ENTITY_ID, DEEP_REACH_BONUS, Operation.ADD_VALUE));
@@ -358,9 +357,9 @@ public class Kays24InchItem extends Item {
     }
 
     private void removeDeepReach(ServerPlayerEntity player) {
-        var b = player.getAttributeInstance(EntityAttributes.BLOCK_INTERACTION_RANGE);
+        var b = player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE);
         if (b != null) b.removeModifier(DEEP_BLOCK_ID);
-        var e = player.getAttributeInstance(EntityAttributes.ENTITY_INTERACTION_RANGE);
+        var e = player.getAttributeInstance(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE);
         if (e != null) e.removeModifier(DEEP_ENTITY_ID);
     }
 

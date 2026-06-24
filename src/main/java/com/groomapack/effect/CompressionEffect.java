@@ -3,7 +3,6 @@ package com.groomapack.effect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
 /**
@@ -37,25 +36,27 @@ public class CompressionEffect extends StatusEffect {
     }
 
     /**
-     * Called each tick this effect is active. At amplifier 2 we trigger the pop.
-     * We clear the effect by setting its duration to 0; Minecraft removes it
-     * automatically on the next tick when duration reaches 0.
+     * Called each tick this effect is active. At amplifier 2 we trigger the pop:
+     * a violent launch. The "fire once and vanish" behaviour comes from the
+     * applier — the (future) weapon applies Compression III with a 1-tick
+     * duration, so the launch happens on the only active tick and vanilla then
+     * removes the expired effect. (We deliberately do NOT self-remove from inside
+     * the tick, which would mutate the active-effects map mid-iteration.)
      */
     @Override
-    public boolean applyUpdateEffect(ServerWorld world, LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         if (amplifier >= 2) {
             // Violent upward launch + a small random horizontal component
-            double vx = (world.getRandom().nextDouble() - 0.5) * 1.2;
+            double vx = (entity.getRandom().nextDouble() - 0.5) * 1.2;
             double vy = 1.4;
-            double vz = (world.getRandom().nextDouble() - 0.5) * 1.2;
+            double vz = (entity.getRandom().nextDouble() - 0.5) * 1.2;
             entity.setVelocity(new Vec3d(vx, vy, vz));
-            entity.velocityDirty = true;
-            entity.removeStatusEffectInternal(this);
+            entity.velocityModified = true; // force the new velocity to sync to the client
         }
         return true;
     }
 
-    /** Pop fires once, immediately, when it's at amplifier 2. */
+    /** Pop fires while at amplifier 2 (applied with a 1-tick duration → once). */
     @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
         return amplifier >= 2 && duration > 0;

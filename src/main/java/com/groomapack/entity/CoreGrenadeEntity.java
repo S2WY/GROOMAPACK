@@ -66,7 +66,7 @@ public class CoreGrenadeEntity extends ThrownItemEntity {
                          (dx / dist) * strength,
                          0.4 * strength,
                          (dz / dist) * strength);
-                 target.velocityDirty = true;
+                 target.velocityModified = true; // sync the knockback to clients
              });
 
         // Visual + sound — server sends particles to all nearby clients.

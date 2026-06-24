@@ -7,7 +7,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.structure.StructureWorldAccess;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.gen.feature.Feature;
@@ -31,12 +31,16 @@ import net.minecraft.world.gen.feature.FeatureContext;
  *
  * Rarity: approximately 1 per 150 chunks (see placed_feature JSON), underground
  * between Y=-40 and Y=-10 in any overworld biome.
+ *
+ * The actual placement lives in {@link #placeRoom} so it can be reused by the
+ * {@code /groomapack structure basement} command, which builds the room on demand
+ * at the player's position.
  */
 public class KaysBasementFeature extends Feature<DefaultFeatureConfig> {
 
-    private static final int W = 13;
-    private static final int H = 7;
-    private static final int D = 13;
+    public static final int W = 13;
+    public static final int H = 7;
+    public static final int D = 13;
 
     public KaysBasementFeature(Codec<DefaultFeatureConfig> codec) {
         super(codec);
@@ -44,25 +48,31 @@ public class KaysBasementFeature extends Feature<DefaultFeatureConfig> {
 
     @Override
     public boolean generate(FeatureContext<DefaultFeatureConfig> ctx) {
-        StructureWorldAccess world = ctx.getWorld();
+        ServerWorldAccess world = ctx.getWorld();
         BlockPos origin = ctx.getOrigin();
         Random random = ctx.getRandom();
 
-        // Basic validity check: don't place if the origin is in air or water.
+        // Basic validity check during worldgen: don't carve into air or fluid.
         if (world.getBlockState(origin).isAir()
                 || world.getBlockState(origin).getFluidState().isStill()) {
             return false;
         }
 
-        placeShell(world, origin);
-        placeFurnishings(world, origin);
-        if (!world.toServerWorld().isClient()) {
-            spawnMobs(world, origin, random);
-        }
+        placeRoom(world, origin, random);
         return true;
     }
 
-    private void placeShell(StructureWorldAccess world, BlockPos origin) {
+    /**
+     * Builds the entire room at {@code origin} (its low-NW-bottom corner).
+     * Reused by both world generation and the structure command.
+     */
+    public static void placeRoom(ServerWorldAccess world, BlockPos origin, Random random) {
+        placeShell(world, origin);
+        placeFurnishings(world, origin);
+        spawnMobs(world, origin, random);
+    }
+
+    private static void placeShell(ServerWorldAccess world, BlockPos origin) {
         for (int x = 0; x < W; x++) {
             for (int y = 0; y < H; y++) {
                 for (int z = 0; z < D; z++) {
@@ -91,7 +101,7 @@ public class KaysBasementFeature extends Feature<DefaultFeatureConfig> {
         }
     }
 
-    private void placeFurnishings(StructureWorldAccess world, BlockPos origin) {
+    private static void placeFurnishings(ServerWorldAccess world, BlockPos origin) {
         // Chest at back-centre with starter loot.
         BlockPos chestPos = origin.add(W/2, 1, D-2);
         world.setBlockState(chestPos, Blocks.CHEST.getDefaultState(), 3);
@@ -110,7 +120,7 @@ public class KaysBasementFeature extends Feature<DefaultFeatureConfig> {
         world.setBlockState(origin.add(2, 1, D/2), ModBlocks.FOUNDRY_BLOCK.getDefaultState(), 3);
     }
 
-    private void spawnMobs(StructureWorldAccess world, BlockPos origin, Random random) {
+    private static void spawnMobs(ServerWorldAccess world, BlockPos origin, Random random) {
         // Two guaranteed Tetouchers.
         spawnTetoucher(world, origin.add(3, 1, 4), random);
         spawnTetoucher(world, origin.add(W-4, 1, D-4), random);
@@ -129,7 +139,7 @@ public class KaysBasementFeature extends Feature<DefaultFeatureConfig> {
         }
     }
 
-    private void spawnTetoucher(StructureWorldAccess world, BlockPos pos, Random random) {
+    private static void spawnTetoucher(ServerWorldAccess world, BlockPos pos, Random random) {
         var t = ModEntityTypes.TETOUCHER.create(world.toServerWorld());
         if (t == null) return;
         t.refreshPositionAndAngles(

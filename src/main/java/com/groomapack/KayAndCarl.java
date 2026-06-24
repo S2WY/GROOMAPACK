@@ -1,5 +1,6 @@
 package com.groomapack;
 
+import com.groomapack.command.ModCommands;
 import com.groomapack.item.BlackStampItem;
 import com.groomapack.registry.ModBlocks;
 import com.groomapack.registry.ModEffects;
@@ -50,6 +51,7 @@ public class KayAndCarl implements ModInitializer {
         ModEntityTypes.registerEntities();
         ModItemGroups.registerItemGroups();
         ModWorldgen.register();
+        ModCommands.register();
 
         registerEventHooks();
 

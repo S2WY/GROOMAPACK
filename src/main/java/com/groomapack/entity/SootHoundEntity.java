@@ -115,13 +115,14 @@ public class SootHoundEntity extends TameableEntity {
         return super.interactMob(player, hand);
     }
 
-    /** 25 % chance per hit to set the target on fire for 3 seconds. */
+    /** 25 % chance per successful hit to set the target on fire for 3 seconds. */
     @Override
-    protected void attackLivingEntity(LivingEntity target) {
-        super.attackLivingEntity(target);
-        if (!this.getWorld().isClient && this.getRandom().nextFloat() < 0.25f) {
+    public boolean tryAttack(net.minecraft.entity.Entity target) {
+        boolean result = super.tryAttack(target);
+        if (result && !this.getWorld().isClient && this.getRandom().nextFloat() < 0.25f) {
             target.setOnFireFor(3);
         }
+        return result;
     }
 
     @Override
@@ -135,6 +136,4 @@ public class SootHoundEntity extends TameableEntity {
     protected SoundEvent getHurtSound(DamageSource src) { return SoundEvents.ENTITY_WOLF_HURT; }
     @Override
     protected SoundEvent getDeathSound() { return SoundEvents.ENTITY_WOLF_DEATH; }
-    @Override
-    protected SoundEvent getStepSound() { return SoundEvents.ENTITY_WOLF_STEP; }
 }

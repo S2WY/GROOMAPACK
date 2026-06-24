@@ -10,8 +10,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 /**
@@ -35,7 +35,7 @@ public class EmberCoatingItem extends Item {
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack coating = user.getStackInHand(hand);
         Hand otherHand = (hand == Hand.MAIN_HAND) ? Hand.OFF_HAND : Hand.MAIN_HAND;
         ItemStack target = user.getStackInHand(otherHand);
@@ -55,13 +55,13 @@ public class EmberCoatingItem extends Item {
                         Text.literal("§6[24 Inch] §fEmber Coating active for §65 minutes§f."),
                         true);
             }
-            return ActionResult.SUCCESS;
+            return TypedActionResult.success(coating, world.isClient);
         }
 
         if (!world.isClient) {
             user.sendMessage(Text.literal("§7Ember Coating only works on Kay's 24 Inch."), true);
         }
-        return ActionResult.PASS;
+        return TypedActionResult.pass(coating);
     }
 
     // --- shared NBT helpers (used by Kays24InchItem too) ---

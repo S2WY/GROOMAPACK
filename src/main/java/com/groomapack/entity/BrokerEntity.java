@@ -117,11 +117,13 @@ public class BrokerEntity extends PathAwareEntity {
         return ActionResult.SUCCESS;
     }
 
-    /** First hit makes him permanently hostile in this lifetime (not saved across worlds). */
+    /** Being hit by a player makes him permanently hostile for the rest of his life. */
     @Override
-    public void onAttacking(net.minecraft.entity.Entity target) {
-        super.onAttacking(target);
-        this.permanentlyHostile = true;
+    public boolean damage(DamageSource source, float amount) {
+        if (source.getAttacker() instanceof PlayerEntity) {
+            this.permanentlyHostile = true;
+        }
+        return super.damage(source, amount);
     }
 
     @Override

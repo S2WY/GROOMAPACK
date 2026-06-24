@@ -29,8 +29,8 @@ import net.minecraft.world.World;
  *
  * MECHANICS:
  *   • Assembled at a Rig Beacon via Carl's Core
- *   • Player right-clicks to mount; right-clicks again or sneaks to dismount
- *   • While mounted: the player's WASD drives The Rig; jump for a short boost
+ *   • Player right-clicks to mount; sneak to dismount
+ *   • While mounted: the player's WASD drives The Rig
  *   • The Rig's own melee is 40 damage (stomps); the player attacks normally too
  *   • Very slow (0.2 speed) but massive knockback resistance; almost immovable
  *   • 200 HP; repairable with Core Cells (right-click while dismounted)
@@ -42,9 +42,11 @@ import net.minecraft.world.World;
  *   • On dismount:  "Carl: \"Good session. Come back soon.\""
  *
  * CONTROLS (while riding):
- *   Movement: standard WASD (forwarded via updatePassengerPosition)
- *   Jump key : boost — 5-block upward launch, 30-second cooldown
+ *   Movement: standard WASD (rider designated via getControllingPassenger)
  *   Sneak key: dismount
+ *
+ * The boostCooldown field is retained for a planned jump-boost; wiring the jump
+ * key requires a client input packet, so the launch itself is not yet active.
  */
 public class TheRigEntity extends PathAwareEntity {
 
@@ -128,16 +130,14 @@ public class TheRigEntity extends PathAwareEntity {
     }
 
     /**
-     * Called when the rider presses the jump key. If the boost is ready, launch
-     * The Rig (and its rider) upward.
+     * Designates the mounted player as the driver. With a non-null controlling
+     * passenger, the client forwards WASD input and the server ticks travel(),
+     * which is where we translate that input into motion.
      */
     @Override
-    public boolean startRiding(net.minecraft.entity.Entity vehicle, boolean force) {
-        return super.startRiding(vehicle, force);
+    public LivingEntity getControllingPassenger() {
+        return this.getFirstPassenger() instanceof PlayerEntity p ? p : super.getControllingPassenger();
     }
-
-    @Override
-    public boolean canBeControlledByRider() { return true; }
 
     @Override
     protected boolean canAddPassenger(net.minecraft.entity.Entity passenger) {
@@ -164,12 +164,6 @@ public class TheRigEntity extends PathAwareEntity {
     @Override
     public void onPassengerLookAround(net.minecraft.entity.Entity passenger) {
         // Rider looks around freely; The Rig's yaw syncs in travel().
-    }
-
-    @Override
-    public Vec3d updatePassengerForQuadrant(net.minecraft.entity.Entity passenger) {
-        // Seat the rider slightly above The Rig's centre, facing front.
-        return new Vec3d(0, this.getHeight() * 0.85, 0);
     }
 
     @Override
@@ -221,7 +215,7 @@ public class TheRigEntity extends PathAwareEntity {
     }
 
     @Override
-    protected SoundEvent getStepSound() {
-        return SoundEvents.ENTITY_IRON_GOLEM_STEP;
+    protected void playStepSound(net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state) {
+        this.playSound(SoundEvents.ENTITY_IRON_GOLEM_STEP, 1.0f, 0.9f);
     }
 }

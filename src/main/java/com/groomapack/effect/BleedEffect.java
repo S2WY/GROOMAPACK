@@ -4,7 +4,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.server.world.ServerWorld;
 
 /**
  * Bleed — a stackable damage-over-time effect.
@@ -33,10 +32,10 @@ public class BleedEffect extends StatusEffect {
      * We deal (amplifier + 1) * 2 raw magic damage — bypasses armour.
      */
     @Override
-    public boolean applyUpdateEffect(ServerWorld world, LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         float damage = (amplifier + 1) * 2.0f;
-        DamageSource src = world.getDamageSources().magic();
-        entity.damage(world, src, damage);
+        DamageSource src = entity.getDamageSources().magic();
+        entity.damage(src, damage);
         return true;
     }
 

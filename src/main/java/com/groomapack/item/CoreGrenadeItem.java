@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 /**
@@ -24,7 +24,7 @@ public class CoreGrenadeItem extends Item {
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
 
         user.playSound(SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5f, 0.8f);
@@ -40,6 +40,6 @@ public class CoreGrenadeItem extends Item {
             user.incrementStat(Stats.USED.getOrCreateStat(this));
         }
 
-        return ActionResult.SUCCESS;
+        return TypedActionResult.success(stack, world.isClient);
     }
 }

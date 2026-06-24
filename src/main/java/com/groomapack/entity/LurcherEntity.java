@@ -58,13 +58,16 @@ public class LurcherEntity extends HostileEntity {
         this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
     }
 
-    /** 40% chance to inflict Bleed I (4 seconds) on each hit. */
+    /** 40% chance to inflict Bleed I (4 seconds) on each successful hit. */
     @Override
-    protected void attackLivingEntity(net.minecraft.entity.LivingEntity target) {
-        super.attackLivingEntity(target);
-        if (!this.getWorld().isClient && this.getRandom().nextFloat() < 0.4f) {
-            target.addStatusEffect(new StatusEffectInstance(ModEffects.BLEED, 80, 0));
+    public boolean tryAttack(net.minecraft.entity.Entity target) {
+        boolean result = super.tryAttack(target);
+        if (result && !this.getWorld().isClient
+                && target instanceof net.minecraft.entity.LivingEntity living
+                && this.getRandom().nextFloat() < 0.4f) {
+            living.addStatusEffect(new StatusEffectInstance(ModEffects.BLEED, 80, 0));
         }
+        return result;
     }
 
     @Override
@@ -73,6 +76,4 @@ public class LurcherEntity extends HostileEntity {
     protected SoundEvent getHurtSound(DamageSource src) { return SoundEvents.ENTITY_ZOMBIE_HURT; }
     @Override
     protected SoundEvent getDeathSound() { return SoundEvents.ENTITY_ZOMBIE_DEATH; }
-    @Override
-    protected SoundEvent getStepSound() { return SoundEvents.ENTITY_ZOMBIE_STEP; }
 }

@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 /**
@@ -31,7 +31,7 @@ public class SharpeningStoneItem extends Item {
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stone = user.getStackInHand(hand);
         Hand otherHand = (hand == Hand.MAIN_HAND) ? Hand.OFF_HAND : Hand.MAIN_HAND;
         ItemStack target = user.getStackInHand(otherHand);
@@ -49,12 +49,12 @@ public class SharpeningStoneItem extends Item {
                         Text.literal("§aKay's 24 Inch sharpened. §7(-" + REPAIR_AMOUNT + " damage)"),
                         true);
             }
-            return ActionResult.SUCCESS;
+            return TypedActionResult.success(stone, world.isClient);
         }
 
         if (!world.isClient) {
             user.sendMessage(Text.literal("§7Nothing to sharpen here."), true);
         }
-        return ActionResult.PASS;
+        return TypedActionResult.pass(stone);
     }
 }
