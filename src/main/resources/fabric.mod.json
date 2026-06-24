@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "kayandcarl",
+  "version": "${version}",
+
+  "name": "Groomapack",
+  "description": "Kay & Carl's Codex — a weapons, mech, and horror-survival pack. Find Kay's Basement, claim Kay's 24 Inch, build The Rig, and survive the Tetoucher.",
+  "authors": [
+    "Groomapack Team"
+  ],
+  "contact": {
+    "homepage": "https://github.com/s2wy/groomapack",
+    "sources": "https://github.com/s2wy/groomapack"
+  },
+
+  "license": "MIT",
+  "icon": "assets/kayandcarl/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.kayandcarl.KayAndCarl"
+    ],
+    "client": [
+      "com.kayandcarl.KayAndCarlClient"
+    ]
+  },
+  "mixins": [
+    "kayandcarl.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.16.9",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {}
+}

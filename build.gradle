@@ -1,0 +1,76 @@
+plugins {
+    // fabric-loom is the Gradle plugin that handles Minecraft modding setup.
+    // It decompiles Minecraft, applies mappings, and sets up the dev environment.
+    id 'fabric-loom' version '1.7-SNAPSHOT'
+    // maven-publish lets us publish the mod as a library if needed later.
+    id 'maven-publish'
+}
+
+// These pull from gradle.properties
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    // Add third-party mod repositories here if we ever depend on other mods.
+    // For now, Fabric's own repos (defined in settings.gradle) are enough.
+}
+
+dependencies {
+    // The Minecraft jar itself.
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+    // Yarn mappings: human-readable names for Minecraft's classes/methods/fields.
+    // Without this, everything would be called "a", "b", "c", etc.
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
+    // The Fabric mod loader.
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Fabric API: the standard library of hooks, events, and utilities for Fabric mods.
+    // Almost every mod uses this.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+// This makes sure fabric.mod.json gets the correct mod version injected at build time.
+processResources {
+    inputs.property "version", project.version
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+// Set the Java version. Minecraft 1.21.x requires Java 21.
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+    it.options.encoding = "UTF-8"
+}
+
+java {
+    // Generate a sources jar alongside the mod jar (useful for debugging).
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+    // Include the license file inside the jar.
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}" }
+    }
+}
+
+// Maven publishing config. Not needed for playing with friends,
+// but good to have set up in case we publish to Modrinth/CurseForge later.
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
