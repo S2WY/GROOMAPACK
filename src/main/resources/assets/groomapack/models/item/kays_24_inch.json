@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "groomapack:item/kays_24_inch"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "kayandcarl",
+  "id": "groomapack",
   "version": "${version}",
 
   "name": "Groomapack",
@@ -14,19 +14,19 @@
   },
 
   "license": "MIT",
-  "icon": "assets/kayandcarl/icon.png",
+  "icon": "assets/groomapack/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.kayandcarl.KayAndCarl"
+      "com.groomapack.KayAndCarl"
     ],
     "client": [
-      "com.kayandcarl.KayAndCarlClient"
+      "com.groomapack.KayAndCarlClient"
     ]
   },
   "mixins": [
-    "kayandcarl.mixins.json"
+    "groomapack.mixins.json"
   ],
 
   "depends": {
