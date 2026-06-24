@@ -23,17 +23,27 @@
   "item.groomapack.gravel_wraith_spawn_egg": "Gravel Wraith Spawn Egg",
   "item.groomapack.soot_hound_spawn_egg": "Soot Hound Spawn Egg",
   "item.groomapack.broker_spawn_egg": "Broker Spawn Egg",
+  "item.groomapack.the_rig_spawn_egg": "The Rig Spawn Egg",
 
   "entity.groomapack.tetoucher": "Tetoucher",
   "entity.groomapack.lurcher": "Lurcher",
   "entity.groomapack.gravel_wraith": "Gravel Wraith",
   "entity.groomapack.soot_hound": "Soot Hound",
   "entity.groomapack.broker": "The Broker",
+  "entity.groomapack.the_rig": "The Rig",
+  "entity.groomapack.core_grenade": "Core Grenade",
 
   "effect.groomapack.confused": "Confused",
   "effect.groomapack.bleed": "Bleed",
   "effect.groomapack.compression": "Compression",
 
+  "block.groomapack.void_tape_block": "Void Tape Block",
   "block.groomapack.foundry_block": "Foundry Block",
-  "block.groomapack.rig_beacon": "Rig Beacon"
+  "block.groomapack.rig_beacon": "Rig Beacon",
+
+  "chat.groomapack.rig.mount": "CARL: Systems online. Hold on tight.",
+  "chat.groomapack.rig.repair": "CARL: Hull integrity restored.",
+  "chat.groomapack.rig.boost": "CARL: Boost engaged!",
+  "chat.groomapack.broker.trade": "The Broker considers your offer...",
+  "chat.groomapack.broker.hostile": "The Broker has lost patience with you."
 }
