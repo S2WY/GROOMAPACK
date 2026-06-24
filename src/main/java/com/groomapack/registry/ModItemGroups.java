@@ -60,6 +60,17 @@ public class ModItemGroups {
             entries.add(ModItems.CARL_ARM);
             entries.add(ModItems.CARL_LEG);
             entries.add(ModItems.CARL_CORE);
+            // Blocks
+            entries.add(ModBlocks.VOID_TAPE_BLOCK.asItem());
+            entries.add(ModBlocks.FOUNDRY_BLOCK.asItem());
+            entries.add(ModBlocks.RIG_BEACON.asItem());
+            // Spawn eggs
+            entries.add(ModItems.TETOUCHER_SPAWN_EGG);
+            entries.add(ModItems.LURCHER_SPAWN_EGG);
+            entries.add(ModItems.GRAVEL_WRAITH_SPAWN_EGG);
+            entries.add(ModItems.SOOT_HOUND_SPAWN_EGG);
+            entries.add(ModItems.BROKER_SPAWN_EGG);
+            entries.add(ModItems.THE_RIG_SPAWN_EGG);
         });
     }
 }

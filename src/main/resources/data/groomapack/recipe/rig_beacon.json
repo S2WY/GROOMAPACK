@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CBC",
+    "III"
+  ],
+  "key": {
+    "C": { "item": "groomapack:core_cell" },
+    "B": { "item": "minecraft:beacon" },
+    "I": { "item": "minecraft:iron_block" }
+  },
+  "result": { "id": "groomapack:rig_beacon", "count": 1 }
+}

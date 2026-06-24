@@ -27,6 +27,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import com.groomapack.item.EmberCoatingItem;
 
 // NOTE FOR COMPILE: AttributeModifierSlot controls WHICH hand/slot the modifier
 // applies to. In 1.21.1 Yarn it is a standalone class, likely at one of:
@@ -273,6 +274,12 @@ public class Kays24InchItem extends Item {
             if (newKills >= 100 && !isAwakened(stack)) {
                 triggerAwakening(stack, attacker);
             }
+        }
+
+        // c) Ember Coating — set target on fire for 4 seconds if coating is active
+        if (!attacker.getWorld().isClient
+                && EmberCoatingItem.isEmberActive(stack, attacker.getWorld().getTime())) {
+            target.setOnFireFor(4);
         }
 
         // Consume one durability per hit (same as vanilla weapons)

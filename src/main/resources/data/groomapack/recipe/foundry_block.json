@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    "I I",
+    "III"
+  ],
+  "key": {
+    "I": { "item": "minecraft:iron_block" }
+  },
+  "result": { "id": "groomapack:foundry_block", "count": 1 }
+}

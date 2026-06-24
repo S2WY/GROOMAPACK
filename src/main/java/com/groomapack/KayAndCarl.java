@@ -1,11 +1,16 @@
 package com.groomapack;
 
+import com.groomapack.item.BlackStampItem;
 import com.groomapack.registry.ModBlocks;
 import com.groomapack.registry.ModEffects;
 import com.groomapack.registry.ModEntityTypes;
 import com.groomapack.registry.ModItemGroups;
 import com.groomapack.registry.ModItems;
+import com.groomapack.worldgen.ModWorldgen;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,38 +18,18 @@ import org.slf4j.LoggerFactory;
 /**
  * The main entry point for Groomapack (Kay & Carl's Codex).
  *
- * Fabric calls {@link #onInitialize()} once, early in the game's startup,
- * on BOTH the client and the dedicated server. This is where we register
- * everything that must exist on both sides: items, blocks, entities,
- * status effects, recipes, etc.
- *
- * Anything that is purely visual (item models, entity renderers, GUI screens)
- * does NOT go here — it goes in {@link KayAndCarlClient}, which only runs on
- * the player's game, never on a headless server.
+ * Fabric calls onInitialize() once, early in game startup, on both client
+ * and dedicated server. Only server-safe registrations live here; all visual
+ * content goes in KayAndCarlClient.
  */
 public class KayAndCarl implements ModInitializer {
 
-    /**
-     * The mod id. This single string is used EVERYWHERE:
-     *   - as the namespace for every item/block/entity ("groomapack:kays_24_inch")
-     *   - as the folder name under assets/ and data/
-     * Keep it lowercase, no spaces. Never change it once the world has saved
-     * with it, or existing items in saved worlds will vanish.
-     */
+    /** The mod id — every registry key is namespaced under this. */
     public static final String MOD_ID = "groomapack";
 
-    /**
-     * A shared logger. Use LOGGER.info("...") to print messages to the game
-     * console. Much better than System.out.println because it's tagged with
-     * our mod name so we can find our messages in the log.
-     */
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    /**
-     * Helper to build an Identifier in our namespace.
-     * Instead of writing Identifier.of("groomapack", "core_cell") everywhere,
-     * we write KayAndCarl.id("core_cell"). Less typing, fewer typos.
-     */
+    /** Convenience factory for identifiers in our namespace. */
     public static Identifier id(String path) {
         return Identifier.of(MOD_ID, path);
     }
@@ -53,16 +38,69 @@ public class KayAndCarl implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Initializing Groomapack (Kay & Carl's Codex)...");
 
-        // ORDER MATTERS a little here. Effects and items are referenced by
-        // recipes/blocks/entities, so we register the "leaf" content first,
-        // then things that depend on it. Within Minecraft's registry system
-        // this is mostly safe in any order, but this reads logically.
-        ModEffects.registerEffects();      // Compression, Bleed, Confused
-        ModItems.registerItems();          // Kay's 24 Inch, Core Dust, etc.
-        ModBlocks.registerBlocks();        // Foundry Block, Rig Beacon
-        ModEntityTypes.registerEntities(); // Tetoucher, Lurcher, Soot Hound...
-        ModItemGroups.registerItemGroups();// our creative-tab so items are findable
+        // Registration order:
+        //   1. Effects first (items/mobs reference them)
+        //   2. Blocks before Items (VoidTapeItem needs ModBlocks.VOID_TAPE_BLOCK)
+        //   3. Items after Blocks
+        //   4. Entities after Items (spawn eggs reference entity types)
+        //   5. Item groups last (reference item fields from ModItems)
+        ModEffects.registerEffects();
+        ModBlocks.registerBlocks();
+        ModItems.registerItems();
+        ModEntityTypes.registerEntities();
+        ModItemGroups.registerItemGroups();
+        ModWorldgen.register();
+
+        registerEventHooks();
 
         LOGGER.info("Groomapack initialized. Welcome to the basement.");
+    }
+
+    /**
+     * Fabric event hooks that cannot be expressed as pure registry entries.
+     *
+     * BLACK STAMP — AFTER_DEATH listener:
+     *   When a LivingEntity dies that was marked with a Black Stamp, its loot
+     *   is dropped a second time by triggering dropLoot() again via reflection
+     *   — except we can't call protected dropLoot() from here. Instead we drop
+     *   a hardcoded "bonus cache" of Common drops appropriate to the mob.
+     *
+     *   Real solution: a Mixin on LivingEntity.dropLoot() that checks the flag
+     *   and doubles the loot table output. That Mixin ships in the Mixin step.
+     *   For now: stamped mobs drop 3 extra Core Cells as a universal bonus,
+     *   PLUS entity-type-specific extras defined below.
+     */
+    private void registerEventHooks() {
+        ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
+            if (!isStamped(entity)) return;
+
+            // Clear the stamp so it doesn't fire again on respawn edge-cases.
+            entity.getCustomData().remove(BlackStampItem.KEY_STAMPED);
+
+            // Universal bonus: 3 Core Cells.
+            entity.dropStack(new ItemStack(ModItems.CORE_CELL, 3));
+
+            // Entity-type-specific bonus drops.
+            dropStampBonus(entity);
+        });
+    }
+
+    private static boolean isStamped(LivingEntity entity) {
+        return entity.getCustomData().getBoolean(BlackStampItem.KEY_STAMPED);
+    }
+
+    private static void dropStampBonus(LivingEntity entity) {
+        if (entity instanceof com.groomapack.entity.TetoucherEntity) {
+            entity.dropStack(new ItemStack(ModItems.TETOUCHER_LEATHER, 2));
+            entity.dropStack(new ItemStack(ModItems.TETOUCHER_BONE, 2));
+        } else if (entity instanceof com.groomapack.entity.LurcherEntity) {
+            entity.dropStack(new ItemStack(net.minecraft.item.Items.ROTTEN_FLESH, 3));
+        } else if (entity instanceof com.groomapack.entity.GravelWraithEntity) {
+            entity.dropStack(new ItemStack(ModItems.PHANTOM_GRIT, 3));
+        } else if (entity instanceof com.groomapack.entity.SootHoundEntity) {
+            entity.dropStack(new ItemStack(ModItems.EMBER_DUST, 2));
+        } else if (entity instanceof com.groomapack.entity.BrokerEntity) {
+            entity.dropStack(new ItemStack(ModItems.BLACK_STAMP, 4));
+        }
     }
 }

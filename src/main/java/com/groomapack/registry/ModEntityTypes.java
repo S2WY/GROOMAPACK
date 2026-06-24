@@ -2,10 +2,12 @@ package com.groomapack.registry;
 
 import com.groomapack.KayAndCarl;
 import com.groomapack.entity.BrokerEntity;
+import com.groomapack.entity.CoreGrenadeEntity;
 import com.groomapack.entity.GravelWraithEntity;
 import com.groomapack.entity.LurcherEntity;
 import com.groomapack.entity.SootHoundEntity;
 import com.groomapack.entity.TetoucherEntity;
+import com.groomapack.entity.TheRigEntity;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -13,6 +15,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.world.Heightmap;
@@ -25,6 +28,31 @@ import net.minecraft.world.Heightmap;
  *   4. Biome spawn weights (how often they appear)
  */
 public class ModEntityTypes {
+
+    // ----------------------------------------------------------------- projectiles / vehicles
+
+    /** Core Grenade projectile — behaves like a snowball, shockwave on impact. */
+    public static final EntityType<CoreGrenadeEntity> CORE_GRENADE = Registry.register(
+            Registries.ENTITY_TYPE,
+            KayAndCarl.id("core_grenade"),
+            EntityType.Builder.<CoreGrenadeEntity>create(CoreGrenadeEntity::new, SpawnGroup.MISC)
+                    .dimensions(0.25f, 0.25f)
+                    .maxTrackingRange(4)
+                    .trackingTickInterval(10)
+                    .build("core_grenade"));
+
+    /**
+     * The Rig — a rideable mech entity assembled at a Rig Beacon.
+     * Full implementation in TheRigEntity (M6). Declared here so RigBeaconBlock
+     * can reference it before M6 is complete.
+     */
+    public static final EntityType<TheRigEntity> THE_RIG = Registry.register(
+            Registries.ENTITY_TYPE,
+            KayAndCarl.id("the_rig"),
+            EntityType.Builder.create(TheRigEntity::new, SpawnGroup.MISC)
+                    .dimensions(1.4f, 2.9f)
+                    .maxTrackingRange(10)
+                    .build("the_rig"));
 
     // ------------------------------------------------------------------ mobs
 
@@ -101,6 +129,8 @@ public class ModEntityTypes {
         FabricDefaultAttributeRegistry.register(GRAVEL_WRAITH,GravelWraithEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(SOOT_HOUND,   SootHoundEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(BROKER,       BrokerEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(THE_RIG,      TheRigEntity.createAttributes());
+        // CoreGrenadeEntity extends ThrownItemEntity — no attributes to register.
 
         registerSpawnRules();
 
@@ -140,9 +170,9 @@ public class ModEntityTypes {
                 SpawnGroup.MONSTER, LURCHER,
                 25, 2, 4);  // weight 25, packs of 2-4
 
-        // Gravel Wraith — underground only
+        // Gravel Wraith — underground/dark areas; floating, no ground needed
         SpawnRestriction.register(GRAVEL_WRAITH,
-                SpawnRestriction.Location.IN_WATER,   // floats; no ground check
+                SpawnRestriction.Location.NO_RESTRICTIONS,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 HostileEntity::canSpawnInDark);
         BiomeModifications.addSpawn(
