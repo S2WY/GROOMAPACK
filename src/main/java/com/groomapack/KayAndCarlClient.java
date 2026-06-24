@@ -1,6 +1,9 @@
 package com.groomapack;
 
+import com.groomapack.client.TetoucherRenderer;
+import com.groomapack.registry.ModEntityTypes;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
 /**
  * The CLIENT-ONLY entry point for Groomapack.
@@ -22,8 +25,11 @@ public class KayAndCarlClient implements ClientModInitializer {
     public void onInitializeClient() {
         KayAndCarl.LOGGER.info("Groomapack client features loading...");
 
+        // Tell the game how to draw the Tetoucher. Reuses the vanilla Enderman
+        // model for now (see TetoucherRenderer); a custom model comes later.
+        EntityRendererRegistry.register(ModEntityTypes.TETOUCHER, TetoucherRenderer::new);
+
         // Coming in later steps, for example:
-        //   EntityRendererRegistry.register(ModEntityTypes.TETOUCHER, TetoucherRenderer::new);
         //   HandledScreens.register(ModScreenHandlers.FOUNDRY, FoundryScreen::new);
         //   KeyBindingHelper.registerKeyBinding(MECH_BLAST_KEY);
     }

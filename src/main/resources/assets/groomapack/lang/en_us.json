@@ -16,5 +16,9 @@
   "item.groomapack.shoearm": "Shoearm",
   "item.groomapack.carl_arm": "Carl's Arm",
   "item.groomapack.carl_leg": "Carl's Leg",
-  "item.groomapack.carl_core": "Carl's Core"
+  "item.groomapack.carl_core": "Carl's Core",
+
+  "entity.groomapack.tetoucher": "Tetoucher",
+
+  "effect.groomapack.confused": "Confused"
 }

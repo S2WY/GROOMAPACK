@@ -26,7 +26,7 @@ public class KayAndCarl implements ModInitializer {
 
     /**
      * The mod id. This single string is used EVERYWHERE:
-     *   - as the namespace for every item/block/entity ("kayandcarl:kays_24_inch")
+     *   - as the namespace for every item/block/entity ("groomapack:kays_24_inch")
      *   - as the folder name under assets/ and data/
      * Keep it lowercase, no spaces. Never change it once the world has saved
      * with it, or existing items in saved worlds will vanish.
@@ -42,7 +42,7 @@ public class KayAndCarl implements ModInitializer {
 
     /**
      * Helper to build an Identifier in our namespace.
-     * Instead of writing Identifier.of("kayandcarl", "core_cell") everywhere,
+     * Instead of writing Identifier.of("groomapack", "core_cell") everywhere,
      * we write KayAndCarl.id("core_cell"). Less typing, fewer typos.
      */
     public static Identifier id(String path) {

@@ -27,14 +27,14 @@ public class ModItemGroups {
 
     /**
      * The tab itself. Its icon is Kay's 24 Inch, and its title text is looked
-     * up from the language file (lang/en_us.json -> "itemgroup.kayandcarl.codex").
+     * up from the language file (lang/en_us.json -> "itemgroup.groomapack.codex").
      */
     public static final ItemGroup CODEX_GROUP = Registry.register(
             Registries.ITEM_GROUP,
             CODEX_GROUP_KEY,
             FabricItemGroup.builder()
                     .icon(() -> new ItemStack(ModItems.KAYS_24_INCH))
-                    .displayName(Text.translatable("itemgroup.kayandcarl.codex"))
+                    .displayName(Text.translatable("itemgroup.groomapack.codex"))
                     .build()
     );
 

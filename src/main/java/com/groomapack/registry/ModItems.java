@@ -99,7 +99,7 @@ public class ModItems {
 
     /**
      * Does the actual registration into Minecraft's global ITEM registry.
-     * @param name the path part of the id, e.g. "core_cell" -> "kayandcarl:core_cell"
+     * @param name the path part of the id, e.g. "core_cell" -> "groomapack:core_cell"
      * @param item the item instance (with its Settings already configured)
      * @return the same item, so we can assign it to a field in one line
      */
