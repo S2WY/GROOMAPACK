@@ -125,25 +125,19 @@ public class ModItems {
     }
 
     /**
-     * Called from KayAndCarl.onInitialize(). The method body can be empty:
-     * simply REFERENCING this class forces the JVM to run all the "static final"
-     * field initializers above, which is what actually registers every item.
-     * The log line gives us a clear "yes it ran" signal in the console.
-     */
-    /**
-     * Called from KayAndCarl.onInitialize(). Spawn eggs are registered here
-     * (after entity types are registered, which happens in ModEntityTypes called
-     * just before this method). The static fields for spawn eggs are not
-     * initialised in their declaration because ModEntityTypes.TETOUCHER etc.
-     * must exist first — these are the only fields that are not "static final".
+     * Called from KayAndCarl.onInitialize(). Accessing any static final field
+     * above is enough to trigger the class initializer (which does all the
+     * Registry.register calls). The log line confirms the block ran.
+     *
+     * Spawn eggs cannot be declared as static-final because they need the
+     * EntityType references to already be registered first.
      */
     public static void registerItems() {
         KayAndCarl.LOGGER.info("Registering Groomapack items");
-        // Spawn eggs — must run after ModEntityTypes.registerEntities().
         TETOUCHER_SPAWN_EGG = register("tetoucher_spawn_egg",
                 new SpawnEggItem(ModEntityTypes.TETOUCHER, 0x1A1A2E, 0xBF0000, new Item.Settings()));
-        // Lurcher/GravelWraith/SootHound/Broker eggs added when those entity
-        // classes are implemented (M3 milestone).
+        // The remaining 5 eggs are registered in registerMobSpawnEggs(), called
+        // from ModEntityTypes.registerEntities() after all entity types exist.
     }
 
     /** Called from ModEntityTypes after all mob entity types exist. */

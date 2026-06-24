@@ -1,10 +1,12 @@
 package com.groomapack.item;
 
 import com.groomapack.KayAndCarl;
+import com.groomapack.item.EmberCoatingItem;
 import com.groomapack.registry.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EquipmentSlot;
@@ -21,17 +23,12 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import com.groomapack.item.EmberCoatingItem;
-
-// AttributeModifierSlot controls WHICH hand/slot the modifier applies to.
-// In 1.21.1 Yarn it lives in the component package.
-import net.minecraft.component.type.AttributeModifierSlot;
 
 /**
  * Kay's 24 Inch — the central multi-tool of Groomapack.

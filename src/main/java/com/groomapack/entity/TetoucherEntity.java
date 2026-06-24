@@ -199,7 +199,7 @@ public class TetoucherEntity extends HostileEntity {
             this.getNavigation().stop();
             this.setTarget(null);
             this.setVelocity(0.0, this.getVelocity().y, 0.0);
-            this.velocityDirty = true;
+            this.velocityModified = true; // sync the zero-horizontal velocity to clients
             return;
         }
 
