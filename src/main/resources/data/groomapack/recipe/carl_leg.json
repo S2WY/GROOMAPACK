@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BG",
+    "IB",
+    "I "
+  ],
+  "key": {
+    "B": { "item": "groomapack:tetoucher_bone" },
+    "G": { "item": "groomapack:phantom_grit" },
+    "I": { "item": "minecraft:iron_ingot" }
+  },
+  "result": { "id": "groomapack:carl_leg", "count": 1 }
+}

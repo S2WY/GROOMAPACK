@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SB",
+    "IS",
+    "B "
+  ],
+  "key": {
+    "S": { "item": "groomapack:shoearm" },
+    "B": { "item": "groomapack:tetoucher_bone" },
+    "I": { "item": "minecraft:iron_ingot" }
+  },
+  "result": { "id": "groomapack:carl_arm", "count": 1 }
+}

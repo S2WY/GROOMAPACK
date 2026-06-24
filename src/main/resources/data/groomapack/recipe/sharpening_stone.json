@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FF",
+    " S"
+  ],
+  "key": {
+    "F": { "item": "minecraft:flint" },
+    "S": { "item": "minecraft:stick" }
+  },
+  "result": { "id": "groomapack:sharpening_stone", "count": 3 }
+}

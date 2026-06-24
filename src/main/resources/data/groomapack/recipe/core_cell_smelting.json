@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": { "item": "groomapack:raw_core_dust" },
+  "result": { "id": "groomapack:core_cell", "count": 1 },
+  "experience": 0.3,
+  "cookingtime": 200
+}

@@ -3,6 +3,7 @@ package com.groomapack.registry;
 import com.groomapack.KayAndCarl;
 import com.groomapack.item.Kays24InchItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
@@ -88,6 +89,16 @@ public class ModItems {
     public static final Item SHOEARM =
             register("shoearm", new Item(new Item.Settings()));
 
+    // ---- Spawn eggs -------------------------------------------------------
+    // Registered in registerItems() because EntityTypes must exist first.
+    // Eggs for Lurcher/GravelWraith/SootHound/Broker are added in M3 when
+    // those entity classes are implemented.
+    public static Item TETOUCHER_SPAWN_EGG;
+    public static Item LURCHER_SPAWN_EGG;
+    public static Item GRAVEL_WRAITH_SPAWN_EGG;
+    public static Item SOOT_HOUND_SPAWN_EGG;
+    public static Item BROKER_SPAWN_EGG;
+
     // ---- Carl Toolbox parts ---------------------------------------------
 
     public static final Item CARL_ARM =
@@ -113,7 +124,31 @@ public class ModItems {
      * field initializers above, which is what actually registers every item.
      * The log line gives us a clear "yes it ran" signal in the console.
      */
+    /**
+     * Called from KayAndCarl.onInitialize(). Spawn eggs are registered here
+     * (after entity types are registered, which happens in ModEntityTypes called
+     * just before this method). The static fields for spawn eggs are not
+     * initialised in their declaration because ModEntityTypes.TETOUCHER etc.
+     * must exist first — these are the only fields that are not "static final".
+     */
     public static void registerItems() {
         KayAndCarl.LOGGER.info("Registering Groomapack items");
+        // Spawn eggs — must run after ModEntityTypes.registerEntities().
+        TETOUCHER_SPAWN_EGG = register("tetoucher_spawn_egg",
+                new SpawnEggItem(ModEntityTypes.TETOUCHER, 0x1A1A2E, 0xBF0000, new Item.Settings()));
+        // Lurcher/GravelWraith/SootHound/Broker eggs added when those entity
+        // classes are implemented (M3 milestone).
+    }
+
+    /** Called from ModEntityTypes after all mob entity types exist. */
+    public static void registerMobSpawnEggs() {
+        LURCHER_SPAWN_EGG = register("lurcher_spawn_egg",
+                new SpawnEggItem(ModEntityTypes.LURCHER,     0x4A3000, 0xCCCC00, new Item.Settings()));
+        GRAVEL_WRAITH_SPAWN_EGG = register("gravel_wraith_spawn_egg",
+                new SpawnEggItem(ModEntityTypes.GRAVEL_WRAITH, 0x888888, 0xDDDDDD, new Item.Settings()));
+        SOOT_HOUND_SPAWN_EGG = register("soot_hound_spawn_egg",
+                new SpawnEggItem(ModEntityTypes.SOOT_HOUND,  0x222222, 0xFF6600, new Item.Settings()));
+        BROKER_SPAWN_EGG = register("broker_spawn_egg",
+                new SpawnEggItem(ModEntityTypes.BROKER,      0x2C2C5E, 0xE8D5B7, new Item.Settings()));
     }
 }

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SS",
+    "LI"
+  ],
+  "key": {
+    "S": { "item": "minecraft:string" },
+    "L": { "item": "minecraft:slime_ball" },
+    "I": { "item": "minecraft:iron_nugget" }
+  },
+  "result": { "id": "groomapack:void_tape", "count": 4 }
+}

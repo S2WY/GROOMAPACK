@@ -18,7 +18,22 @@
   "item.groomapack.carl_leg": "Carl's Leg",
   "item.groomapack.carl_core": "Carl's Core",
 
-  "entity.groomapack.tetoucher": "Tetoucher",
+  "item.groomapack.tetoucher_spawn_egg": "Tetoucher Spawn Egg",
+  "item.groomapack.lurcher_spawn_egg": "Lurcher Spawn Egg",
+  "item.groomapack.gravel_wraith_spawn_egg": "Gravel Wraith Spawn Egg",
+  "item.groomapack.soot_hound_spawn_egg": "Soot Hound Spawn Egg",
+  "item.groomapack.broker_spawn_egg": "Broker Spawn Egg",
 
-  "effect.groomapack.confused": "Confused"
+  "entity.groomapack.tetoucher": "Tetoucher",
+  "entity.groomapack.lurcher": "Lurcher",
+  "entity.groomapack.gravel_wraith": "Gravel Wraith",
+  "entity.groomapack.soot_hound": "Soot Hound",
+  "entity.groomapack.broker": "The Broker",
+
+  "effect.groomapack.confused": "Confused",
+  "effect.groomapack.bleed": "Bleed",
+  "effect.groomapack.compression": "Compression",
+
+  "block.groomapack.foundry_block": "Foundry Block",
+  "block.groomapack.rig_beacon": "Rig Beacon"
 }

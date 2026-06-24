@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "II",
+    "KK"
+  ],
+  "key": {
+    "I": { "item": "minecraft:ink_sac" },
+    "K": { "item": "minecraft:iron_ingot" }
+  },
+  "result": { "id": "groomapack:black_stamp", "count": 4 }
+}

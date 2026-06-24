@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CEC",
+    "EGE",
+    "CEC"
+  ],
+  "key": {
+    "C": { "item": "groomapack:core_cell" },
+    "E": { "item": "groomapack:ember_dust" },
+    "G": { "item": "minecraft:gold_ingot" }
+  },
+  "result": { "id": "groomapack:carl_core", "count": 1 }
+}

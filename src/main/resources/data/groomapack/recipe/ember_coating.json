@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EE",
+    "BP"
+  ],
+  "key": {
+    "E": { "item": "groomapack:ember_dust" },
+    "B": { "item": "minecraft:blaze_powder" },
+    "P": { "item": "minecraft:paper" }
+  },
+  "result": { "id": "groomapack:ember_coating", "count": 2 }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " N ",
+    "NCN",
+    " N "
+  ],
+  "key": {
+    "N": { "item": "minecraft:iron_nugget" },
+    "C": { "item": "groomapack:core_cell" }
+  },
+  "result": { "id": "groomapack:core_grenade", "count": 4 }
+}
