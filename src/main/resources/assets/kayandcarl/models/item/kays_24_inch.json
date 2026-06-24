@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "kayandcarl:item/kays_24_inch"
+  }
+}

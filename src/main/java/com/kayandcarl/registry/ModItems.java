@@ -1,6 +1,7 @@
 package com.kayandcarl.registry;
 
 import com.kayandcarl.KayAndCarl;
+import com.kayandcarl.item.Kays24InchItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -27,9 +28,13 @@ public class ModItems {
 
     // ---- The Codex's signature gear -------------------------------------
 
-    /** Kay's 24 Inch — the universal multi-tool. Behavior added in a later step. */
+    /**
+     * Kay's 24 Inch — the universal multi-tool.
+     * maxCount(1): only one can be held at a time (it's a unique weapon, not stackable).
+     * maxDamage(2500): more durable than netherite (2031), earned through Kay's Basement.
+     */
     public static final Item KAYS_24_INCH =
-            register("kays_24_inch", new Item(new Item.Settings().maxCount(1).maxDamage(2500)));
+            register("kays_24_inch", new Kays24InchItem(new Item.Settings().maxCount(1).maxDamage(2500)));
 
     /** Raw Core Dust — extracted from dirt by Kay's 24 Inch, smelted into Core Cells. */
     public static final Item RAW_CORE_DUST =
