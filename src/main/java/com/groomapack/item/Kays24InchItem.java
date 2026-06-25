@@ -319,7 +319,6 @@ public class Kays24InchItem extends Item {
      * No netherite ingot, no other material. The stone also works in the field
      * (right-click logic handled in SharpeningStoneItem, built in a later step).
      */
-    @Override
     public boolean canRepairWith(ItemStack ingredient) {
         return ingredient.isOf(ModItems.SHARPENING_STONE);
     }
