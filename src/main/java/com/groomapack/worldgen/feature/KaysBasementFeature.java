@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.FeatureContext;
+import net.minecraft.world.gen.feature.util.FeatureContext;
 
 /**
  * Kay's Basement — the hand-crafted dungeon room that generates underground.
