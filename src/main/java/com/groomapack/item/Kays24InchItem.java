@@ -320,7 +320,7 @@ public class Kays24InchItem extends Item {
      * (right-click logic handled in SharpeningStoneItem, built in a later step).
      */
     @Override
-    public boolean canRepairWith(ItemStack stack, ItemStack ingredient) {
+    public boolean canRepairWith(ItemStack ingredient) {
         return ingredient.isOf(ModItems.SHARPENING_STONE);
     }
 

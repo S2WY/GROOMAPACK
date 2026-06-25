@@ -171,11 +171,8 @@ public class ModEntityTypes {
                 SpawnGroup.MONSTER, LURCHER,
                 25, 2, 4);  // weight 25, packs of 2-4
 
-        // Gravel Wraith — underground/dark areas; floating, no ground needed
-        SpawnRestriction.register(GRAVEL_WRAITH,
-                SpawnLocationTypes.UNRESTRICTED,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                HostileEntity::canSpawnInDark);
+        // Gravel Wraith — floating entity; BiomeModifications handles where it spawns.
+        // SpawnRestriction not registered (FlyingEntity + UNRESTRICTED incompatible with the API).
         BiomeModifications.addSpawn(
                 BiomeSelectors.foundInOverworld(),
                 SpawnGroup.MONSTER, GRAVEL_WRAITH,

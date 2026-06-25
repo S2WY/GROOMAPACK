@@ -2,9 +2,7 @@ package com.groomapack.entity;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.control.FlightMoveControl;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
-import net.minecraft.entity.ai.goal.RevengeGoal;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -59,9 +57,9 @@ public class GravelWraithEntity extends FlyingEntity {
 
     @Override
     protected void initGoals() {
+        // RevengeGoal and ActiveTargetGoal require PathAwareEntity; FlyingEntity is not.
+        // Custom targeting goals can be added via a Goal subclass in a later step.
         this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 10.0f));
-        this.targetSelector.add(1, new RevengeGoal(this));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
     }
 
     /** Arrows, snowballs, and all projectiles pass right through. */

@@ -134,6 +134,12 @@ public class SootHoundEntity extends TameableEntity {
     public boolean isBreedingItem(ItemStack stack) { return false; }
 
     @Override
+    public SootHoundEntity createChild(net.minecraft.server.world.ServerWorld world,
+                                       net.minecraft.entity.passive.PassiveEntity entity) {
+        return null;
+    }
+
+    @Override
     protected SoundEvent getAmbientSound() { return SoundEvents.ENTITY_WOLF_AMBIENT; }
     @Override
     protected SoundEvent getHurtSound(DamageSource src) { return SoundEvents.ENTITY_WOLF_HURT; }
