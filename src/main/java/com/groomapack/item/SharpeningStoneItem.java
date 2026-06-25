@@ -4,7 +4,6 @@ import com.groomapack.registry.ModItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
@@ -43,8 +42,7 @@ public class SharpeningStoneItem extends Item {
 
                 if (!user.getAbilities().creativeMode) stone.decrement(1);
 
-                user.playSound(SoundEvents.ITEM_FLINTANDSTEEL_USE,
-                        SoundCategory.PLAYERS, 0.8f, 1.4f);
+                user.playSound(SoundEvents.ITEM_FLINTANDSTEEL_USE, 0.8f, 1.4f);
                 user.sendMessage(
                         Text.literal("§aKay's 24 Inch sharpened. §7(-" + REPAIR_AMOUNT + " damage)"),
                         true);

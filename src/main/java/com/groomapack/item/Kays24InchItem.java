@@ -190,7 +190,7 @@ public class Kays24InchItem extends Item {
             setToolMode(stack, newMode);
             String label = newMode ? "§a[Tool Mode]" : "§c[Combat Mode]";
             user.sendMessage(Text.literal("Kay's 24 Inch → " + label), true); // true = action bar
-            user.getItemCooldownManager().set(stack, 10); // brief cooldown to prevent spam
+            user.getItemCooldownManager().set(this, 10); // brief cooldown to prevent spam
             return TypedActionResult.success(stack, world.isClient);
         }
 
@@ -249,7 +249,7 @@ public class Kays24InchItem extends Item {
      *      At 100 kills the tool awakens.
      */
     @Override
-    public void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         // a) Tool Mode: undo most of the damage (leaves 0.5 as feedback so the hit "feels" real)
         if (isToolMode(stack)) {
             if (attacker instanceof PlayerEntity player) {

@@ -131,6 +131,9 @@ public class SootHoundEntity extends TameableEntity {
     }
 
     @Override
+    public boolean isBreedingItem(ItemStack stack) { return false; }
+
+    @Override
     protected SoundEvent getAmbientSound() { return SoundEvents.ENTITY_WOLF_AMBIENT; }
     @Override
     protected SoundEvent getHurtSound(DamageSource src) { return SoundEvents.ENTITY_WOLF_HURT; }

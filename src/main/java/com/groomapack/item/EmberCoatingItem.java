@@ -7,7 +7,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
@@ -49,8 +48,7 @@ public class EmberCoatingItem extends Item {
 
                 if (!user.getAbilities().creativeMode) coating.decrement(1);
 
-                user.playSound(SoundEvents.ITEM_FLINTANDSTEEL_USE,
-                        SoundCategory.PLAYERS, 1.0f, 0.7f);
+                user.playSound(SoundEvents.ITEM_FLINTANDSTEEL_USE, 1.0f, 0.7f);
                 user.sendMessage(
                         Text.literal("§6[24 Inch] §fEmber Coating active for §65 minutes§f."),
                         true);

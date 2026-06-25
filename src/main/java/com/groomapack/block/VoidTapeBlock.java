@@ -55,9 +55,4 @@ public class VoidTapeBlock extends Block {
                 SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.6f, 1.5f);
     }
 
-    /** Can be pushed by pistons (intentional — players can extend the bridge). */
-    @Override
-    public net.minecraft.block.piston.PistonBehavior getPistonBehavior(BlockState state) {
-        return net.minecraft.block.piston.PistonBehavior.NORMAL;
-    }
 }

@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.SpawnLocationTypes;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
@@ -152,7 +153,7 @@ public class ModEntityTypes {
     private static void registerSpawnRules() {
         // Tetoucher — surface or cave, dark (light ≤ 7), rare
         SpawnRestriction.register(TETOUCHER,
-                SpawnRestriction.Location.ON_GROUND,
+                SpawnLocationTypes.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 HostileEntity::canSpawnInDark);
         BiomeModifications.addSpawn(
@@ -162,7 +163,7 @@ public class ModEntityTypes {
 
         // Lurcher — common swarmer in the dark
         SpawnRestriction.register(LURCHER,
-                SpawnRestriction.Location.ON_GROUND,
+                SpawnLocationTypes.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 HostileEntity::canSpawnInDark);
         BiomeModifications.addSpawn(
@@ -172,7 +173,7 @@ public class ModEntityTypes {
 
         // Gravel Wraith — underground/dark areas; floating, no ground needed
         SpawnRestriction.register(GRAVEL_WRAITH,
-                SpawnRestriction.Location.NO_RESTRICTIONS,
+                SpawnLocationTypes.UNRESTRICTED,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 HostileEntity::canSpawnInDark);
         BiomeModifications.addSpawn(
@@ -182,7 +183,7 @@ public class ModEntityTypes {
 
         // Soot Hound — creature (spawns like animals), surface
         SpawnRestriction.register(SOOT_HOUND,
-                SpawnRestriction.Location.ON_GROUND,
+                SpawnLocationTypes.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 (type, world, reason, pos, random) -> world.getLightLevel(pos) > 7);
         BiomeModifications.addSpawn(

@@ -77,7 +77,7 @@ public class KayAndCarl implements ModInitializer {
             if (!isStamped(entity)) return;
 
             // Clear the stamp so it doesn't fire again on respawn edge-cases.
-            entity.getCustomData().remove(BlackStampItem.KEY_STAMPED);
+            BlackStampItem.STAMPED_ENTITIES.remove(entity.getUuid());
 
             // Universal bonus: 3 Core Cells.
             entity.dropStack(new ItemStack(ModItems.CORE_CELL, 3));
@@ -88,7 +88,7 @@ public class KayAndCarl implements ModInitializer {
     }
 
     private static boolean isStamped(LivingEntity entity) {
-        return entity.getCustomData().getBoolean(BlackStampItem.KEY_STAMPED);
+        return BlackStampItem.STAMPED_ENTITIES.contains(entity.getUuid());
     }
 
     private static void dropStampBonus(LivingEntity entity) {
